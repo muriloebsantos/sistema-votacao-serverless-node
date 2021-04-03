@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "Sistema-Votacao-Node"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-eoij7l6b464u"
+s3_prefix = "Sistema-Votacao-Node"
+region = "sa-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
