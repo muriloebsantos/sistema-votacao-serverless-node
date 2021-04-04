@@ -1,9 +1,9 @@
-import InserirEleicaoRequest from "../models/requests/inserirEleicaoRequest";
+import NovaEleicaoRequest from "../models/requests/novaEleicaoRequest";
 import ErrorResponse from "../models/responses/ErrorResponse";
 import Eleicao from "../models/tables/eleicao";
 import EleicaoRepository from '../repositories/eleicaoRepository';
 
-export default class InserirEleicaoService {
+export default class EleicaoService {
 
     private eleicaoRepository: EleicaoRepository;
 
@@ -11,8 +11,8 @@ export default class InserirEleicaoService {
         this.eleicaoRepository = new EleicaoRepository();
     }
 
-    public async inserirEleicao(inserirEleicaoRequest: InserirEleicaoRequest):  Promise<Eleicao | ErrorResponse> {
-        const erro = this.obterErroValidacao(inserirEleicaoRequest);
+    public async inserirEleicao(novaEleicaoRequest: NovaEleicaoRequest):  Promise<Eleicao | ErrorResponse> {
+        const erro = this.validarInclusao(novaEleicaoRequest);
 
         if(erro) {
             return {
@@ -21,7 +21,7 @@ export default class InserirEleicaoService {
             }
         }
 
-        const eleicaoExistente = await this.eleicaoRepository.obterEleicao(inserirEleicaoRequest.id);
+        const eleicaoExistente = await this.eleicaoRepository.obterEleicao(novaEleicaoRequest.id);
 
         if(eleicaoExistente) {
             return {
@@ -31,9 +31,9 @@ export default class InserirEleicaoService {
         }
 
         const eleicao: Eleicao = {
-            id: inserirEleicaoRequest.id,
-            nome: inserirEleicaoRequest.nome,
-            descricao: inserirEleicaoRequest.descricao,
+            id: novaEleicaoRequest.id,
+            nome: novaEleicaoRequest.nome,
+            descricao: novaEleicaoRequest.descricao,
             dataInclusao: new Date().toISOString()
         };
 
@@ -42,7 +42,7 @@ export default class InserirEleicaoService {
         return eleicao;
     }
 
-    public obterErroValidacao(inserirEleicaoRequest: InserirEleicaoRequest): string {
+    private validarInclusao(inserirEleicaoRequest: NovaEleicaoRequest): string {
         if(!inserirEleicaoRequest.id) {
             return "Código da eleição é obrigatório";
         }
