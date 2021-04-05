@@ -43,6 +43,19 @@ export default class EleitorService {
         return eleitor;
     }
 
+    public async obterEleitor(eleicaoId: string, eleitorId: string): Promise<Eleitor | ErrorResponse>  {
+        const eleitor = await this.eleitorRepository.obterEleitor(eleitorId, eleicaoId);
+
+        if(!eleitor) {
+            return {
+                status: 404,
+                error: "Usuário não registrado / não realizou check-in"
+            };
+        }
+
+        return eleitor;
+    }
+
     private validarInclusao(novoEleitorRequest: NovoEleitorRequest) : string {
         if(!novoEleitorRequest.id) {
             return "Código do Eleitor é obrigatório";
